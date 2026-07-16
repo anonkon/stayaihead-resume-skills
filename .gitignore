@@ -1,0 +1,16 @@
+# LaTeX build artifacts (relevant if you test-compile inside this repo)
+*.aux
+*.log
+*.out
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+
+# OS cruft
+.DS_Store
+Thumbs.db
+
+# Never commit personal resume data if it ends up nested under this repo by mistake
+resume/
+profile.md
+preferences.md
