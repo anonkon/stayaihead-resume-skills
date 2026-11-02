@@ -13,6 +13,8 @@ I built these for myself because applying to jobs properly, meaning rewriting a 
 
 `tailor-job` mirrors the job description's keywords into your CV (without inventing experience you don't have), flags red flags such as seniority mismatch, visa/citizenship requirements, and roles you've said to avoid, and asks before doing anything that touches git.
 
+It also runs a verification pass over the generated `.tex` and `.pdf` before telling you it's done, because the failure mode that actually matters is a cover letter that reads like it came out of a model. See [House style](#house-style) below.
+
 ## Prerequisites
 
 - [Claude Code](https://claude.com/claude-code) CLI
@@ -20,6 +22,7 @@ I built these for myself because applying to jobs properly, meaning rewriting a 
   - Windows: [MiKTeX](https://miktex.org/)
   - macOS: [MacTeX](https://www.tug.org/mactex/)
   - Linux / WSL: `texlive` (e.g. `sudo apt install texlive-latex-extra`)
+- Optional: `pdftotext` (from `poppler-utils`, and bundled with MiKTeX). Used by one verification check that greps the rendered PDF for stray em/en dashes. Everything else works without it.
 
 ## Install
 
@@ -72,8 +75,10 @@ Claude will:
 2. Ask up to 4 quick clarifying questions (what to emphasise, hiring manager name, etc.)
 3. Create `{working_directory}/{Company}_{RoleShort}/`
 4. Write a tailored CV and cover letter as LaTeX source
-5. Compile both to PDF
-6. If the working directory is a git repo, offer to commit (and push, if you confirm)
+5. Compile both to PDF and confirm each is exactly one page
+6. Run the house-style checks over the source and the PDFs, fix anything that fails, and recompile
+7. Delete the LaTeX build artifacts, leaving four files in the folder
+8. If the working directory is a git repo, offer to commit (and push, if you confirm)
 
 Output:
 ```
@@ -85,6 +90,18 @@ Output:
 ```
 
 You'll also get a short report: top matched keywords, any gaps, and flags (e.g. "this role requires citizenship, and you flagged that as a dealbreaker").
+
+## House style
+
+The generated documents follow a fixed set of rules, enforced by `grep` checks in Step 6b of `tailor-job` rather than left to the model's judgement. The point is that a hiring manager who spots AI prose discounts everything else in the application.
+
+- **No dashes as punctuation.** Not `---`, not `--`, not the em/en dash characters. Ranges read `Jan. 2024 to Present`. LaTeX turning `--` into an en dash inside a macro definition is the way this most often leaks through, so the `\roleheader` macro uses a comma.
+- **No semicolons, and no colons** outside URLs, a standard's canonical name (`ISO/IEC 27001:2022`), and LaTeX syntax that requires one. Project subtitles take a comma, skills category labels sit bold on their own line, and the cover letter subject line reads `Application for {Role}` rather than `Re: {Role}`.
+- **A banned vocabulary list**: *gate*, *at scale*, *structurally*, *leverage*, *robust*, *seamless*, *holistic*, *moreover*, and roughly seventy more. Terms that are the real name of something you built (*RAG*, *CI/CD*, *test harness*) stay.
+- **Banned constructions**, most of all the nominalised gerund: *"Turning a requirement into guidance a team can act on is the part of the job I do most."* Nobody says that out loud.
+- **Fixed CV anchors**: the summary is always the first section, the skills section is always the last. Everything in between can be reordered to suit the role.
+
+Add your own banned words under `## Phrases to avoid` in `preferences.md` and they get folded into the same check. All of it lives in `skills/tailor-job/SKILL.md` and is meant to be edited.
 
 ## Privacy
 
@@ -103,3 +120,8 @@ Claude Code skills are Markdown files with YAML frontmatter (`name`, `descriptio
 ## License
 
 [MIT](LICENSE)
+
+
+### Required writing review
+
+Both installers include the bundled no-ai-slop skill. Every tailor-job run loads it and its evaluation checklist, edits all application prose before compilation, and repeats the review after follow-up edits. Re-run install.ps1 or install.sh and accept replacement of tailor-job and no-ai-slop to enable this workflow in an existing installation.

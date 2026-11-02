@@ -68,9 +68,16 @@ Ask these if not already answered:
 - Seniority floor/ceiling? (e.g. junior to mid only, no senior)
 - Any citizenship/visa constraints to flag?
 - Preferred tone for cover letters? (e.g. direct, not corporate, no "I am writing to express my interest")
-- Any phrases or patterns to always avoid?
+- Any phrases or patterns to always avoid? (these become a grep check in `tailor-job`, so be literal - exact words, not vibes)
+- Any past job title you want presented differently on tailored CVs? (e.g. a title in a field you've said to avoid)
 - Base CV length preference (1-page / 2-page)?
+- What should be emphasised for each type of role you apply to? (e.g. "for GRC roles lead with the ISO 27001 work, for engineering roles lead with the platform build")
 - Working directory for generated applications - e.g. `~/resume-applications/` (see tailor-job's README section on choosing this path; it should NOT be the same repo as this skills repo)
+
+`tailor-job` already enforces a house style on everything it writes: no dashes as
+punctuation, no semicolons, no colons outside URLs and standard names, and a long list
+of banned AI vocabulary. Don't re-ask about any of that. Record only what the user
+wants on top of it, and any place they want it relaxed.
 
 ### Step 5 - Write files
 
@@ -122,12 +129,23 @@ Write `preferences.md` with this structure:
 ## Phrases to avoid
 ...
 
+## Job title reframing
+...
+
 ## LaTeX conventions
+...
+
+## What to emphasise (by role type)
 ...
 
 ## Working directory
 ~/resume-applications/
 ```
+
+`tailor-job` reads `## Roles to avoid`, `## Seniority`, `## Phrases to avoid`,
+`## Job title reframing` and `## Working directory` by name, so keep those headings
+exactly as written even when a section is short. Leave a section out entirely rather
+than filling it with placeholder text.
 
 ### Step 6 - Confirm
 Show the user a summary of what was written. Ask: "Anything to correct or add?"

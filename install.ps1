@@ -4,7 +4,7 @@ $ErrorActionPreference = "Stop"
 
 $SrcDir = Join-Path $PSScriptRoot "skills"
 $DestDir = Join-Path $HOME ".claude\skills"
-$Skills = @("build-profile", "tailor-job")
+$Skills = @("build-profile", "tailor-job", "no-ai-slop")
 
 New-Item -ItemType Directory -Force -Path $DestDir | Out-Null
 

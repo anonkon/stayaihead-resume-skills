@@ -6,7 +6,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SRC_DIR="$SCRIPT_DIR/skills"
 DEST_DIR="$HOME/.claude/skills"
-SKILLS=(build-profile tailor-job)
+SKILLS=(build-profile tailor-job no-ai-slop)
 
 mkdir -p "$DEST_DIR"
 
